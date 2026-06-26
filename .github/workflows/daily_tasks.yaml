@@ -1,0 +1,31 @@
+name: 8-Hour Google Tasks Sync
+
+on:
+  schedule:
+    # Triggers at 8AM, 4PM, and 12AM Local Time (converted to UTC)
+    - cron: '30 1,9,17 * * *'
+  workflow_dispatch: # Allows you to manually trigger it with a button click
+
+jobs:
+  run-sync:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository Code
+      uses: actions/checkout@v4
+
+    - name: Set up Python Environment
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Install Dependencies
+      run: |
+        pip install google-auth-oauthlib google-api-python-client
+
+    - name: Inject Secure Credentials from GitHub Secrets
+      run: |
+        echo '${{ secrets.CLIENT_SECRET_JSON }}' > client_secret.json
+        echo '${{ secrets.TOKEN_JSON }}' > token.json
+
+    - name: Execute Script
+      run: python3 get_token.py
