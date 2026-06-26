@@ -3,7 +3,7 @@ name: 8-Hour Google Tasks Sync
 on:
   schedule:
     # Triggers at 8AM, 4PM, and 12AM Local Time (converted to UTC)
-    - cron: '30 1,9,17 * * *'
+    - cron: '30 */6 * * *'
   workflow_dispatch: # Allows you to manually trigger it with a button click
 
 jobs:
