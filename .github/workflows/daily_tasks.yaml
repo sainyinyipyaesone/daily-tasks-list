@@ -31,4 +31,4 @@ jobs:
       env: 
         CLIENT_SECRET_JSON: ${{secrets.CLIENT_SECRET_JSON}}
         TOKEN_JSON: ${{secrets.TOKEN_JSON}}
-      run: python3 get_token.py
+      run: python3 daily_tasks_update.py
