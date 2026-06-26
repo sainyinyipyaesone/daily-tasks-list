@@ -28,4 +28,7 @@ jobs:
         echo '${{ secrets.TOKEN_JSON }}' > token.json
 
     - name: Execute Script
+      env: 
+        CLIENT_SECRET_JSON: ${{secrets.CLIENT_SECRET_JSON}}
+        TOKEN_JSON: ${{secrets.TOKEN_JSON}}
       run: python3 get_token.py
