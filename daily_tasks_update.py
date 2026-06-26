@@ -23,15 +23,16 @@ def get_user_tasks():
     token_info = json.loads(token_env)
 
     # 3. Initialize credentials directly from memory
-    creds = Credentials.from_authorized_user_info(token_info, SCOPES)
+    web_config = client_config.get('web', client_config.get('installed', {}))
+    authorized_user_info = dict(token_info)
+    authorized_user_info.setdefault('client_id', web_config.get('client_id'))
+    authorized_user_info.setdefault('client_secret', web_config.get('client_secret'))
+    authorized_user_info.setdefault('token_uri', web_config.get('token_uri', 'https://oauth2.googleapis.com/token'))
+    creds = Credentials.from_authorized_user_info(authorized_user_info, SCOPES)
 
     # 4. Handle token refresh if expired
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
-            web_config = client_config.get('web', client_config.get('installed', {}))
-            creds.client_id = web_config.get('client_id')
-            creds.client_secret = web_config.get('client_secret')
-            creds.token_uri = web_config.get('token_uri', 'https://oauth2.googleapis.com/token')
             creds.refresh(Request())
         else:
             raise Exception("Critical Error: Saved token session is entirely invalid or missing a refresh_token.")
